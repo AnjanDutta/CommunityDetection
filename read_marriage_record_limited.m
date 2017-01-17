@@ -1,6 +1,6 @@
 function [avpn1, avpn2] = read_marriage_record_limited()
 
-dir_res = './Results/' ;
+dir_res = '/home/anjan/Workspace/5CofM/Results/' ;
 filenames = dir(fullfile(dir_res, '*.csv')) ;
 filenames = {filenames.name} ;
 ids_marriage_es = {} ;
@@ -17,7 +17,7 @@ for ifile = 1:length(filenames)
         frewind(fp);
         header = fgetl(fp) ;
 
-        num_fields = length(strfind(header,';'));
+        num_fields = length(strfind(header,';'))+1;
         formatSpec = [repmat('%s ', 1, num_fields-1) , '%s'];
 
         information = textscan(header,formatSpec, 'Delimiter', ';');
@@ -31,7 +31,7 @@ for ifile = 1:length(filenames)
         % Fields of interest
         avpn1 = strcmpi(information, 'AVPN 1');
         avpn2 = strcmpi(information, 'AVPN 2');
-        similarity = strcmpi(information, 'Similitud');
+        similarity = strcmpi(information, '');
 
         % Parse filename to know if it is from ESposa or MArit
         [~, fid, ~] = fileparts(fid);
