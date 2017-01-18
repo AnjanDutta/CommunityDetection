@@ -213,9 +213,9 @@ for ma_id = ma_unique'
     id_sim = cellfun(@str2num, ids(:,end));
     [~, max_pos] = max(id_sim);
     
-    id_mm = [id_me; strcat(ids(max_pos,1),'_ES')] ;
-    id_pm = [id_pe; strcat(ids(max_pos,1),'_MA')] ;
-    id_ma = [id_es; strcat(ids(max_pos,2),'_MA')] ;   
+    id_mm = [id_mm; strcat(ids(max_pos,1),'_ES')] ;
+    id_pm = [id_pm; strcat(ids(max_pos,1),'_MA')] ;
+    id_ma = [id_ma; strcat(ids(max_pos,2),'_MA')] ;   
     
 end ;
 
@@ -232,29 +232,30 @@ edges_marit = [idx_mm idx_ma;idx_pm idx_ma] ;
 
 A_marit = sparse(edges_marit(:,1), edges_marit(:,2), 1, size(attrbs_nodes, 1) , size(attrbs_nodes, 1) ) ;
 
-% disp('Plot')
-% 
-% uniq_ids_marriage = unique(cellfun(@(x) x(1:end-3), attrbs_nodes(:,1),...
-%     'UniformOutput', false)) ;
+disp('PLOT')
 
+ids_marriage = cellfun(@(x) x(1:end-3), attrbs_nodes(:,1), 'UniformOutput', false) ;
 
-% [uniq_ids_marriage, ~, ic] = unique(ids_marriage(:,1:2)) ;
+uniq_ids_marriage = unique(ids_marriage) ;
+
 % nmarriages = length(uniq_ids_marriage) ;
 % edges = reshape(ic, size(ids_marriage(:,1:2))) ;
 % E = sparse(edges(:,1), edges(:,2), [ids_marriage{:,3}], nmarriages, nmarriages) ;
 % 
 % Create 2-dimensional coordinates for each AVPN (marriage) for plotting
 
-% years = str2double(cellfun(@(x) x(1:4), uniq_ids_marriage, 'UniformOutput', false)) ;
-% uniq_years = unique(years)' ;
-% x = zeros(length(uniq_ids_marriage),1) ;
-% for iy = uniq_years
-%     idx = find(years == iy) ;
-%     x(idx) = 1:length(idx) ;
-% end;
-% vertices = [x, years] ;
-% 
-% % Plot the big graph
+years = str2double(cellfun(@(x) x(1:4), uniq_ids_marriage, 'UniformOutput', false)) ;
+uniq_years = unique(years)' ;
+x = zeros(length(uniq_ids_marriage),1) ;
+
+for iy = uniq_years
+    idx = find(years == iy) ;
+    x(idx) = 1:length(idx) ;
+end;
+
+vertices = [x, years] ;
+
+% Plot the big graph
 % plot(vertices(:,1), vertices(:,2), 'r*','MarkerSize', 5);
 % 
 % hold on;
