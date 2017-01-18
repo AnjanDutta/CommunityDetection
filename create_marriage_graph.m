@@ -237,6 +237,7 @@ disp('PLOT')
 ids_marriage = cellfun(@(x) x(1:end-3), attrbs_nodes(:,1), 'UniformOutput', false) ;
 
 uniq_ids_marriage = unique(ids_marriage) ;
+[~, locb] = ismember(ids_marriage, uniq_ids_marriage) ;
 
 % nmarriages = length(uniq_ids_marriage) ;
 % edges = reshape(ic, size(ids_marriage(:,1:2))) ;
@@ -254,16 +255,29 @@ for iy = uniq_years
 end;
 
 vertices = [x, years] ;
+vertices = vertices(locb, :) ;
 
-% Plot the big graph
-% plot(vertices(:,1), vertices(:,2), 'r*','MarkerSize', 5);
+es_or_ma = cellfun(@(x) x(end-1:end), attrbs_nodes(:,1), 'UniformOutput', false) ;
+
+z(strcmp(es_or_ma, 'MA')) = 1 ;
+z(strcmp(es_or_ma, 'ES')) = 2 ;
+
+vertices(:,1) = 10*vertices(:,1) + z' ;
+
+% vertices = [vertices, z'] ;
 % 
-% hold on;
-% 
-% [x, y] = gplot(E==1, vertices) ;
-% plot(x, y, 'b-', 'Linewidth', 1) ;
-% 
-% [x, y] = gplot(E==2, vertices) ;
-% plot(x, y, 'g-', 'Linewidth', 1) ;
-% 
-% set(gca, 'Ydir', 'reverse') ; 
+% % Plot the big graph
+plot(vertices(:,1), vertices(:,2), 'r*','MarkerSize', 5);
+
+hold on;
+
+[x, y] = gplot(A_marriages, vertices) ;
+plot(x, y, 'm-', 'Linewidth', 1) ;
+
+[x, y] = gplot(A_marit, vertices) ;
+plot(x, y, 'g-', 'Linewidth', 1) ;
+
+[x, y] = gplot(A_esposa, vertices) ;
+plot(x, y, 'b-', 'Linewidth', 1) ;
+
+set(gca, 'Ydir', 'reverse') ; 
